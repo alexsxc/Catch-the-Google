@@ -18,6 +18,22 @@ const _state = {
     }
 } // state is shared between all components
 
+// pattern observer
+let _observers = []
+export function subscribe(observer) {
+    _observers.push(observer);
+}
+function _notifyObservers() {
+    _observers.forEach(o => {
+        try  {
+            o();
+        } catch(error) {
+            console.error(error);
+        }
+    })
+}
+/////////
+
 function _getIndexByNumber(playerNumber)  {
     const playerIndex = playerNumber - 1;
 
@@ -27,6 +43,13 @@ function _getIndexByNumber(playerNumber)  {
 
     return playerIndex;
 }
+
+setInterval(() => {
+    console.log(_state.positions.google);
+    _state.positions.google = {x: 1, y:  2};
+    _notifyObservers(); // observers will be notified after each interval
+}, 2000)
+
 
 export async function getGooglePoints() {
     return _state.points.google;
