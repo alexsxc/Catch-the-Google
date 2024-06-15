@@ -1,5 +1,9 @@
 const _state = {
     settings: {
+        /**
+         * in milliseconds
+         */
+        googleJumpInterval: 5000,
         gridSize: {
             rowsCount: 4,
             columnsCount: 4,
@@ -81,7 +85,7 @@ setInterval(() => {
     _jumpGoogleToNewPositions(); // position for google
     _state.points.google +=  1; // points for google
     _notifyObservers(); // observers will be notified after each interval
-}, 1000)
+}, _state.settings.googleJumpInterval);
 //////////
 
 export async function getGooglePoints() {
