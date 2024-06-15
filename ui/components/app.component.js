@@ -5,12 +5,16 @@ import { SettingsComponent } from "./settings/Settings.component.js";
 export function AppComponent() {
     const element = document.createElement('div');
 
-    const settingsElement = SettingsComponent();
-    const resultPanelElement = ResultPanelComponent();
-    const gridElement = GridComponent();
+    render(element);
 
+    return {element};
+}
 
-    element.append(settingsElement, resultPanelElement, gridElement);
+async function render(element) {
 
-    return element;
+    const settingsComponent = SettingsComponent();
+    const resultPanelComponent = ResultPanelComponent();
+    const gridComponent = GridComponent();
+
+    element.append(settingsComponent.element, resultPanelComponent.element, gridComponent.element);
 }

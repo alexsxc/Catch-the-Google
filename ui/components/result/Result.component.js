@@ -5,7 +5,12 @@ export function ResultPanelComponent() {
 
     element.classList.add('result-panel'); // styling
 
-    async function render() { // rendering async function
+    render(element);
+
+    return {element};
+}
+
+async function render(element) { // rendering async function
 
     const googlePoints = await getGooglePoints();
     const player1Points = await getPlayerPoints(1);
@@ -14,9 +19,4 @@ export function ResultPanelComponent() {
 
     element.append(`player1: ${player1Points}, player2: ${player2Points}, google: ${googlePoints}`);
 
-    };
-
-    render();
-
-    return element;
-}
+}; // maybe useEffect ;)
