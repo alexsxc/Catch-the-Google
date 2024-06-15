@@ -1,13 +1,16 @@
-import { getGooglePoints, getPlayerPoints } from "../../core/state-manager.js";
+import { GridComponent } from "./grid/Grid.component.js";
+import { ResultPanelComponent } from "./result/Result.component.js";
+import { SettingsComponent } from "./settings/Settings.component.js";
 
 export function AppComponent() {
     const element = document.createElement('div');
-    const googlePoints = getGooglePoints();
-    const player1Points = getPlayerPoints(1);
-    const player2Points = getPlayerPoints(2);
+
+    const settingsElement = SettingsComponent();
+    const resultPanelElement = ResultPanelComponent();
+    const gridElement = GridComponent();
 
 
-    element.append(`player1: ${player1Points}, player2: ${player2Points}, google: ${googlePoints}`);
+    element.append(settingsElement, resultPanelElement, gridElement);
 
     return element;
 }
