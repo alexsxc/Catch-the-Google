@@ -32,6 +32,9 @@ function _notifyObservers() {
         }
     })
 }
+export function unSubscribe(observer) {
+    _observers.filter(o => o !== observer);
+}
 /////////
 
 function _getIndexByNumber(playerNumber)  {
@@ -43,13 +46,43 @@ function _getIndexByNumber(playerNumber)  {
 
     return playerIndex;
 }
+// generate random number https://stackoverflow.com/questions/40617379/javascript-get-a-random-number-within-range-min-and-max-both-exclusive
+function _generateRandomNumber(min, max)  {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random()  *  (max  -  min  +  1)  +  min);
+}
+//////////
+
+// moving
+function _jumpGoogleToNewPositions() {
+    const newPosition = {..._state.positions.google};
+
+    do {
+        newPosition.x = _generateRandomNumber(0,  _state.settings.gridSize.columnsCount - 1);
+        newPosition.y = _generateRandomNumber(0,  _state.settings.gridSize.rowsCount - 1);
+
+        var isNewPositionGoogle = 
+        newPosition.x === _state.positions.google.x &&
+        newPosition.y === _state.positions.google.y;
+        var isNewPositionPlayer1 = 
+        newPosition.x === _state.positions.players[0].x &&
+        newPosition.y === _state.positions.players[0].y;
+        var isNewPositionPlayer2 = 
+        newPosition.x === _state.positions.players[1].x &&
+        newPosition.y === _state.positions.players[1].y;
+    } while (isNewPositionGoogle ||  isNewPositionPlayer1 ||  isNewPositionPlayer2);
+
+    _state.positions.google =  newPosition;
+}
 
 setInterval(() => {
     console.log(_state.positions.google);
-    _state.positions.google = {x: 1, y:  2};
+    _jumpGoogleToNewPositions(); // position for google
+    _state.points.google +=  1; // points for google
     _notifyObservers(); // observers will be notified after each interval
-}, 2000)
-
+}, 1000)
+//////////
 
 export async function getGooglePoints() {
     return _state.points.google;
