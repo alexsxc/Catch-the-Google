@@ -3,18 +3,20 @@ const _state = {
         google: 10,
         players: [11, 2]
     }
-}
+} // state is shared between all components
 
-export function getGooglePoints() {
+export async function getGooglePoints() {
     return _state.points.google;
 }
+
 /** 
  * 
  * @param {number} playerNumber - one-based index of player
- * @returns {number} numbers of player points
+ * @returns {Promise<number>} numbers of player points
  * 
  * */
-export function getPlayerPoints(playerNumber) {
+
+export async function getPlayerPoints(playerNumber) {
     const playerIndex = playerNumber - 1;
 
     if (playerIndex  <  0 ||  playerIndex > _state.points.players.length - 1) {

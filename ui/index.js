@@ -6,4 +6,4 @@ rootElement.innerHTML = '';
 
 const AppElement = AppComponent()
 
-rootElement.append(AppElement);
+rootElement.append(AppElement); // rendering components in DOM tree
