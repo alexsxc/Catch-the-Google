@@ -1,7 +1,7 @@
 import { GAME_STATUSES } from "./constants.js";
 
 const _state = {
-    gameStatus: GAME_STATUSES.IN_PROGRESS,
+    gameStatus: GAME_STATUSES.SETTINGS,
     settings: {
         /**
          * in milliseconds
@@ -87,18 +87,6 @@ function _jumpGoogleToNewPositions() {
 
 let googleJumpInterval;
 
-googleJumpInterval = setInterval(() => {
-    console.log(_state.positions.google);
-    _jumpGoogleToNewPositions(); // position for google
-    _state.points.google +=  1; // points for google
-
-    if (_state.points.google === _state.settings.pointsToLose)  {
-        clearInterval(googleJumpInterval);
-        _state.gameStatus = GAME_STATUSES.LOSE;
-    }
-
-    _notifyObservers(); // observers will be notified after each interval
-}, _state.settings.googleJumpInterval);
 //////////
 
 export async function getGooglePoints() {
@@ -111,6 +99,30 @@ export async function getGooglePoints() {
  * @returns {Promise<number>} numbers of player points
  * 
  * */
+export async function start() {
+    _state.gameStatus = GAME_STATUSES.IN_PROGRESS;
+    _state.positions.players[0] = {x: 0, y: 0};
+    _state.positions.players[1] = {x: _state.settings.gridSize.columnsCount - 1, y: _state.settings.gridSize.rowsCount - 1};
+    _jumpGoogleToNewPositions();
+
+    googleJumpInterval = setInterval(() => {
+        console.log(_state.positions.google);
+        _jumpGoogleToNewPositions(); // position for google
+        _state.points.google +=  1; // points for google
+    
+        if (_state.points.google === _state.settings.pointsToLose)  {
+            clearInterval(googleJumpInterval);
+            _state.gameStatus = GAME_STATUSES.LOSE;
+        }
+    
+        _notifyObservers(); // observers will be notified after each interval
+    }, _state.settings.googleJumpInterval);
+    _notifyObservers();
+}
+export async function playAgain() {
+    _state.gameStatus = GAME_STATUSES.SETTINGS;
+    _notifyObservers();
+}
 
 export async function getPlayerPoints(playerNumber) {
     const playerIndex  = _getIndexByNumber(playerNumber);

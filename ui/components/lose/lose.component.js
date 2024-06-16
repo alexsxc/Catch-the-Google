@@ -1,3 +1,5 @@
+import { playAgain } from "../../../core/state-manager.js";
+
 export function LoseComponent() {
     const element = document.createElement('div');
 
@@ -7,5 +9,14 @@ export function LoseComponent() {
 }
 
 async function render(element) {
-    element.append('GOOGLE WIN!');
+    const titleElement = document.createElement('h1');
+    titleElement.append('YOU LOSE!')
+    element.append(titleElement);
+
+    const button =  document.createElement('button');
+    button.addEventListener('click', () => {
+        playAgain();
+    });
+    element.append(button);
+
 }
