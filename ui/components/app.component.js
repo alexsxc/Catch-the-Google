@@ -1,4 +1,7 @@
+import { GAME_STATUSES } from "../../core/constants.js";
+import { getGameStatus } from "../../core/state-manager.js";
 import { GridComponent } from "./grid/Grid.component.js";
+import { LoseComponent } from "./lose/lose.component.js";
 import { ResultPanelComponent } from "./result/Result.component.js";
 import { SettingsComponent } from "./settings/Settings.component.js";
 
@@ -12,9 +15,23 @@ export function AppComponent() {
 
 async function render(element) {
 
-    const settingsComponent = SettingsComponent();
-    const resultPanelComponent = ResultPanelComponent();
-    const gridComponent = GridComponent();
+    const gameStatus = await getGameStatus();
+    switch (gameStatus) {
+        case GAME_STATUSES.IN_PROGRESS:
+            const settingsComponent = SettingsComponent();
+            const resultPanelComponent = ResultPanelComponent();
+            const gridComponent = GridComponent();
 
-    element.append(settingsComponent.element, resultPanelComponent.element, gridComponent.element);
+            element.append(settingsComponent.element, resultPanelComponent.element, gridComponent.element);
+           break;
+        case GAME_STATUSES.LOSE: 
+            const loseComponent = LoseComponent();
+
+            element.append(loseComponent.element);
+           break;
+        default:
+            throw new Error('Unknown game status');
+    }
+
+
 }
